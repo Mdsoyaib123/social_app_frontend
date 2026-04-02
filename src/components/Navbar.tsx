@@ -1,4 +1,3 @@
-import React from "react";
 import { Bell, MessageCircle } from "lucide-react";
 
 interface NavbarProps {
@@ -11,55 +10,46 @@ interface NavbarProps {
 
 const Navbar = ({ logo, user }: NavbarProps) => {
   return (
-    <nav className="bg-white fixed top-0 left-0 right-0 z-50 border-b shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-
-        {/* LEFT - LOGO */}
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b bg-white shadow-sm">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <div className="flex items-center">
           <img src={logo} alt="logo" className="h-8" />
         </div>
 
-        {/* CENTER - SEARCH */}
-        <div className="flex-1 max-w-xl mx-6 hidden sm:block">
+        <div className="mx-6 hidden max-w-xl flex-1 sm:block">
           <input
             type="text"
             placeholder="Search..."
-            className="w-full bg-gray-100 rounded-full py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b8fff]"
+            className="w-full rounded-full bg-gray-100 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1b8fff]"
           />
         </div>
 
-        {/* RIGHT - ACTIONS */}
         <div className="flex items-center gap-5">
-
-          {/* NOTIFICATIONS */}
           <div className="relative cursor-pointer">
             <Bell size={20} />
-            <span className="absolute -top-1 -right-2 bg-[#1b8fff] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+            <span className="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#1b8fff] text-[10px] text-white">
               6
             </span>
           </div>
 
-          {/* MESSAGES */}
           <div className="relative cursor-pointer">
             <MessageCircle size={20} />
-            <span className="absolute -top-1 -right-2 bg-[#1b8fff] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+            <span className="absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#1b8fff] text-[10px] text-white">
               2
             </span>
           </div>
 
-          {/* USER */}
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex cursor-pointer items-center gap-2">
             <img
-              src={user?.avatar}
-              alt="user"
-              className="w-8 h-8 rounded-full object-cover"
+              src={user.avatar}
+              alt="user avatar"
+              className="h-8 w-8 rounded-full object-cover"
             />
-            <span className="text-sm font-medium hidden sm:block">
-              {user?.name}
+            <span className="hidden text-sm font-medium sm:block">
+              {user.name}
             </span>
           </div>
         </div>
-
       </div>
     </nav>
   );
