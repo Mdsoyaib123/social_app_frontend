@@ -1,11 +1,19 @@
 import { Outlet } from "react-router-dom"
+import logo from "./assets/images/logo.svg";
+import profileImg from "./assets/images/profile.png";
+import Navbar from "./components/Navbar"
 
 function App() {
-
+  const user = {
+    name: "Dylan Field",
+    avatar: profileImg,
+  };
   return (
     <div>
-      <h1 className="">Social App</h1>
-      <Outlet />
+     <Navbar logo={logo} user={user} />
+     <div className="">
+       <Outlet />
+     </div>
     </div>
   )
 }

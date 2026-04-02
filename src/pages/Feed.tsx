@@ -1,240 +1,375 @@
-import React from 'react';
+import logo from "../assets/images/logo.svg";
+import profileImg from "../assets/images/profile.png";
+import postImg from "../assets/images/post_img.png";
+import timelineImg from "../assets/images/timeline_img.png";
+import card_ppl1 from "../assets/images/card_ppl1.png";
+import card_ppl2 from "../assets/images/card_ppl2.png";
+import card_ppl3 from "../assets/images/card_ppl3.png";
+import card_ppl4 from "../assets/images/card_ppl4.png";
+import Avatar from "../assets/images/Avatar.png";
+import Navbar from "../components/Navbar";
+import { useState } from "react";
+import {
+  FiPlay,
+  FiBarChart2,
+  FiUserPlus,
+  FiBookmark,
+  FiUsers,
+  FiSettings,
+  FiSave,
+} from "react-icons/fi";
+import { MdOutlineSportsEsports } from "react-icons/md";
+
+const stories = [card_ppl1, card_ppl2, card_ppl3, card_ppl4];
 
 const Feed = () => {
+  const [search, setSearch] = useState("");
+
+  const user = {
+    name: "Dylan Field",
+    avatar: profileImg,
+  };
+
+  const post = {
+    author: "Karim Saif",
+    time: "5 minute ago",
+    visibility: "Public",
+    text: "-Healthy Tracking App",
+    likes: 198,
+    comments: 12,
+    shares: 122,
+    image: timelineImg,
+  };
+  const friendsData = [
+    { name: "Steve Jobs", role: "CEO", avatar: Avatar, online: true },
+    { name: "Elon Musk", role: "Founder", avatar: Avatar, online: true },
+    { name: "Mark Zuckerberg", role: "CEO", avatar: Avatar, online: false },
+    { name: "Bill Gates", role: "Co-founder", avatar: Avatar, online: true },
+    { name: "Bill ", role: "Co-owner", avatar: Avatar, online: true },
+    { name: "Steve Jobs", role: "CEO", avatar: Avatar, online: true },
+    { name: "Bill Gates", role: "Co-founder", avatar: Avatar, online: true },
+    { name: "Jeff Bezos", role: "Entrepreneur", avatar: Avatar, online: false },
+  ];
+  const filteredFriends = friendsData.filter((friend) =>
+    friend.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
-    <div className="min-h-screen bg-[#F0F2F5] font-['Poppins']">
-      {/* Background Shapes (kept for consistency with Login/Register) */}
-      <div className="absolute top-0 left-0 z-0 opacity-30">
-        <img src="/assets/images/shape1.svg" alt="" className="w-40" />
-      </div>
+    <div className="min-h-screen bg-[#F5F7FA] font-['Poppins']">
+      {/* NAVBAR */}
+      <Navbar logo={logo} user={user} />
 
-      {/* Main Layout */}
-      <div className="_layout _layout_main_wrapper">
-        {/* Desktop Top Navigation */}
-        <nav className="bg-white shadow fixed top-0 left-0 right-0 z-50 border-b">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex items-center justify-between h-16">
-              {/* Logo */}
-              <div className="flex items-center">
-                <img src="/assets/images/logo.svg" alt="Buddy Script" className="h-9" />
+      {/* MAIN */}
+      <div className="pt-20 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-12 gap-6">
+          {/* LEFT */}
+          <aside className="col-span-3 hidden lg:block">
+            <div className="space-y-6 sticky top-24">
+
+              {/* EXPLORE */}
+              <div className="bg-white rounded-xl shadow-sm p-5">
+                <h4 className="font-semibold text-lg mb-6">Explore</h4>
+
+            <ul className="space-y-5 text-gray-600">
+
+  <li className="flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <FiPlay className="text-lg text-gray-500" />
+      <span className="text-sm font-medium">Learning</span>
+    </div>
+    <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
+      New
+    </span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <FiBarChart2 className="text-lg text-gray-500" />
+    <span className="text-sm font-medium">Insights</span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <FiUserPlus className="text-lg text-gray-500" />
+    <span className="text-sm font-medium">Find friends</span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <FiBookmark className="text-lg text-gray-500" />
+    <span className="text-sm font-medium">Bookmarks</span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <FiUsers className="text-lg text-gray-500" />
+    <span className="text-sm font-medium">Group</span>
+  </li>
+
+  <li className="flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <MdOutlineSportsEsports className="text-lg text-gray-500" />
+      <span className="text-sm font-medium">Gaming</span>
+    </div>
+    <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">
+      New
+    </span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <FiSettings className="text-lg text-gray-500" />
+    <span className="text-sm font-medium">Settings</span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <FiSave className="text-lg text-gray-500" />
+    <span className="text-sm font-medium">Save post</span>
+  </li>
+
+</ul>
               </div>
 
-              {/* Search */}
-              <div className="flex-1 max-w-xl mx-8">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full bg-gray-100 border border-transparent focus:border-purple-400 rounded-full py-2.5 pl-11 text-sm focus:outline-none"
-                  />
-                  <div className="absolute left-4 top-3 text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 01-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </div>
+              {/* SUGGESTED PEOPLE */}
+              <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="flex justify-between items-center mb-5">
+                  <h4 className="font-semibold text-lg">Suggested People</h4>
+                  <span className="text-[#1b8fff] text-sm cursor-pointer">
+                    See All
+                  </span>
                 </div>
-              </div>
 
-              {/* Right Side Icons */}
-              <div className="flex items-center gap-6">
-                <a href="#" className="relative text-gray-600 hover:text-purple-600 transition">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1v-5m10-10l2 2m-2-2v10a1 1 0 01-1 1v-5m-6 0a1 1 0 001-1v5" />
-                  </svg>
-                </a>
+                <div className="space-y-5">
 
-                <a href="#" className="relative text-gray-600 hover:text-purple-600 transition">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-9-5.197V8.5m.002 3.5L12 14l-2.998 2.5" />
-                  </svg>
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">6</span>
-                </a>
+                  {/* PERSON */}
+                  {[
+                    { name: "Steve Jobs", role: "CEO of Apple" },
+                    { name: "Ryan Roslansky", role: "CEO of Linkedin" },
+                    { name: "Dylan Field", role: "CEO of Figma" },
+                  ].map((person, index) => (
+                    <div key={index} className="flex items-center justify-between">
 
-                <a href="#" className="relative text-gray-600 hover:text-purple-600 transition">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2 2 2 0 01-2-2z" />
-                  </svg>
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">2</span>
-                </a>
-
-                {/* Profile */}
-                <div className="flex items-center gap-2 cursor-pointer">
-                  <img src="/assets/images/profile.png" alt="Profile" className="w-8 h-8 rounded-full object-cover" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">Dylan Field</p>
-                  </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        {/* Main Content Area */}
-        <div className="pt-20 pb-20 max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Left Sidebar - Explore */}
-            <div className="lg:col-span-3 hidden lg:block">
-              <div className="bg-white rounded-2xl shadow p-6 sticky top-24">
-                <h4 className="font-semibold text-lg mb-5">Explore</h4>
-                <ul className="space-y-5">
-                  <li><a href="#" className="flex items-center gap-3 text-gray-700 hover:text-purple-600">Learning</a></li>
-                  <li><a href="#" className="flex items-center gap-3 text-gray-700 hover:text-purple-600">Insights</a></li>
-                  <li><a href="#" className="flex items-center gap-3 text-gray-700 hover:text-purple-600">Find Friends</a></li>
-                  <li><a href="#" className="flex items-center gap-3 text-gray-700 hover:text-purple-600">Groups</a></li>
-                  <li><a href="#" className="flex items-center gap-3 text-gray-700 hover:text-purple-600">Bookmarks</a></li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Main Feed Area */}
-            <div className="lg:col-span-6">
-              {/* Story Section */}
-              <div className="bg-white rounded-2xl shadow p-5 mb-6 overflow-x-auto">
-                <div className="flex gap-4">
-                  {/* Your Story */}
-                  <div className="flex-shrink-0 text-center">
-                    <div className="relative">
-                      <img src="/assets/images/card_ppl1.png" alt="Your Story" className="w-16 h-16 rounded-full object-cover border-2 border-purple-500" />
-                      <div className="absolute bottom-0 right-0 bg-purple-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">+</div>
-                    </div>
-                    <p className="text-xs mt-1 text-gray-600">Your Story</p>
-                  </div>
-
-                  {/* Other Stories */}
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="flex-shrink-0 text-center">
-                      <div className="relative">
-                        <img src={`/assets/images/card_ppl${(i % 4) + 2}.png`} alt="Story" className="w-16 h-16 rounded-full object-cover border-2 border-white shadow" />
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={Avatar}
+                          className="w-10 h-10 rounded-full object-cover"
+                          alt={person.name}
+                        />
+                        <div>
+                          <p className="text-sm font-medium">{person.name}</p>
+                          <p className="text-xs text-gray-500">{person.role}</p>
+                        </div>
                       </div>
-                      <p className="text-xs mt-1 text-gray-600">Ryan...</p>
+
+                      <button className="text-sm px-4 py-1 border rounded-lg text-gray-500 hover:bg-gray-100">
+                        Connect
+                      </button>
+
+                    </div>
+                  ))}
+
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+          {/* FEED */}
+          <main className="col-span-12 lg:col-span-6">
+            {/* STORIES */}
+            <div className="bg-white rounded-xl shadow-sm p-4 mb-6">
+              <div className="flex gap-4 overflow-x-auto">
+                <div className="min-w-[120px] h-[170px] bg-[#1b8fff] rounded-xl flex flex-col items-center justify-center text-white">
+                  <div className="w-10 h-10 rounded-full bg-white text-[#1b8fff] flex items-center justify-center text-xl font-bold mb-2">
+                    +
+                  </div>
+                  <span className="text-sm font-medium">Your Story</span>
+                </div>
+
+                {stories.map((img, i) => (
+                  <div
+                    key={i}
+                    className="min-w-[120px] h-[170px] rounded-xl overflow-hidden relative"
+                  >
+                    <img
+                      src={img}
+                      className="w-full h-full object-cover absolute inset-0"
+                      alt="story"
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+                    <img
+                      src={img}
+                      className="w-8 h-8 rounded-full border-2 border-white absolute top-3 right-3 object-cover"
+                      alt="story user"
+                    />
+
+                    <span className="absolute bottom-3 left-3 text-white text-xs font-medium">
+                      User
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CREATE POST */}
+            <div className="bg-white rounded-xl shadow-sm p-5 mb-6">
+              <div className="flex gap-3 mb-4">
+                <img src={profileImg} className="w-10 h-10 rounded-full" alt="me" />
+                <input
+                  placeholder="What's on your mind?"
+                  className="flex-1 bg-gray-100 rounded-full px-4 text-sm focus:outline-none"
+                />
+              </div>
+
+              <div className="flex justify-between items-center border-t pt-4 text-sm text-gray-600">
+                <div className="flex gap-6">
+                  <span>Photo</span>
+                  <span>Video</span>
+                  <span>Event</span>
+                  <span>Article</span>
+                </div>
+
+                <button className="bg-[#1b8fff] hover:bg-[#0f7ae5] text-white px-5 py-2 rounded-lg">
+                  Post
+                </button>
+              </div>
+            </div>
+
+            {/* POST */}
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="p-5 flex justify-between">
+                <div className="flex gap-3">
+                  <img src={postImg} className="w-10 h-10 rounded-full" alt="post" />
+                  <div>
+                    <p className="font-medium text-sm">{post.author}</p>
+                    <p className="text-xs text-gray-500">
+                      {post.time} • {post.visibility}
+                    </p>
+                  </div>
+                </div>
+                <button>⋮</button>
+              </div>
+
+              <div className="px-5 pb-3 text-sm">{post.text}</div>
+
+              <img src={post.image} alt="post" />
+
+              <div className="px-5 py-3 flex justify-between text-sm text-gray-500 border-t">
+                <span>❤️ {post.likes}</span>
+                <span>
+                  {post.comments} Comments • {post.shares} Shares
+                </span>
+              </div>
+
+              <div className="border-t flex text-sm">
+                <button className="flex-1 py-3 hover:bg-gray-50 text-[#1b8fff]">
+                  Like
+                </button>
+                <button className="flex-1 py-3 hover:bg-gray-50">
+                  Comment
+                </button>
+                <button className="flex-1 py-3 hover:bg-gray-50">
+                  Share
+                </button>
+              </div>
+            </div>
+          </main>
+
+          {/* RIGHT */}
+          {/* RIGHT */}
+          <aside className="col-span-3 hidden lg:block">
+            <div className="space-y-6 sticky top-24">
+
+              {/* YOU MIGHT LIKE */}
+              <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-semibold">You Might Like</h4>
+                  <span className="text-[#1b8fff] text-sm cursor-pointer">See All</span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-3 items-center">
+                    <img
+                      src={Avatar}
+                      className="w-12 h-12 rounded-full object-cover"
+                      alt="avatar"
+                    />
+                    <div>
+                      <p className="text-sm font-medium">Radovan SkillArena</p>
+                      <p className="text-xs text-gray-500">
+                        Founder & CEO at Trophy
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button className="px-3 py-1 text-xs border rounded-lg text-gray-500 hover:bg-gray-100">
+                      Ignore
+                    </button>
+                    <button className="px-3 py-1 text-xs bg-[#1b8fff] text-white rounded-lg hover:bg-[#0f7ae5]">
+                      Follow
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* YOUR FRIENDS */}
+              <div className="bg-white rounded-xl shadow-sm p-5">
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-semibold">Your Friends</h4>
+                  <span className="text-[#1b8fff] text-sm cursor-pointer">
+                    See All
+                  </span>
+                </div>
+
+                {/* SEARCH */}
+                <div className="mb-4">
+                  <div className="flex items-center bg-gray-100 rounded-full px-4 py-2">
+                    <span className="text-gray-400 text-sm mr-2">🔍</span>
+                    <input
+                      type="text"
+                      placeholder="input search text"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      className="bg-transparent outline-none text-sm w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* FRIEND LIST */}
+                <div className="space-y-4">
+                  {filteredFriends.map((friend, index) => (
+                    <div key={index} className="flex justify-between items-center">
+
+                      {/* LEFT */}
+                      <div className="flex gap-3 items-center">
+                        <img
+                          src={friend.avatar}
+                          className="w-10 h-10 rounded-full object-cover"
+                          alt={friend.name}
+                        />
+                        <div>
+                          <p className="font-medium text-sm">{friend.name}</p>
+                          <p className="text-xs text-gray-400">
+                            {friend.role}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* STATUS */}
+                      <div className="flex items-center gap-2">
+                        {friend.online ? (
+                          <span className="w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+                        ) : (
+                          <span className="text-xs text-gray-400">
+                            5 minute ago
+                          </span>
+                        )}
+                      </div>
+
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Create Post Box */}
-              <div className="bg-white rounded-2xl shadow p-6 mb-6">
-                <div className="flex items-start gap-4">
-                  <img src="/assets/images/txt_img.png" alt="Profile" className="w-10 h-10 rounded-full" />
-                  <div className="flex-1">
-                    <textarea
-                      className="w-full border border-gray-200 focus:border-purple-400 rounded-2xl px-5 py-4 text-sm resize-none focus:outline-none"
-                      rows={3}
-                      placeholder="Write something..."
-                    ></textarea>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mt-4 border-t pt-4">
-                  <div className="flex gap-6 text-gray-600">
-                    <button className="flex items-center gap-2 hover:text-purple-600">
-                      <span>📷</span> Photo
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-purple-600">
-                      <span>🎥</span> Video
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-purple-600">
-                      <span>📅</span> Event
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-purple-600">
-                      <span>📝</span> Article
-                    </button>
-                  </div>
-                  <button className="bg-purple-600 text-white px-8 py-2.5 rounded-xl font-medium hover:bg-purple-700 transition">
-                    Post
-                  </button>
-                </div>
-              </div>
-
-              {/* Sample Post */}
-              <div className="bg-white rounded-2xl shadow mb-6 overflow-hidden">
-                <div className="p-6 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <img src="/assets/images/post_img.png" alt="" className="w-10 h-10 rounded-full" />
-                    <div>
-                      <p className="font-medium">Karim Saif</p>
-                      <p className="text-xs text-gray-500">5 minutes ago • Public</p>
-                    </div>
-                  </div>
-                  <button className="text-gray-400 hover:text-gray-600">
-                    ⋮
-                  </button>
-                </div>
-
-                <div className="px-6 pb-4">
-                  <p className="text-gray-800">-Healthy Tracking App</p>
-                </div>
-
-                <img src="/assets/images/timeline_img.png" alt="Post" className="w-full" />
-
-                <div className="px-6 py-4 flex items-center justify-between text-sm border-t">
-                  <div className="flex items-center gap-1 text-gray-500">
-                    ❤️👍 198
-                  </div>
-                  <div className="flex gap-6 text-gray-500">
-                    <span>12 Comments</span>
-                    <span>122 Shares</span>
-                  </div>
-                </div>
-
-                {/* Reactions */}
-                <div className="border-t flex text-center">
-                  <button className="flex-1 py-3 hover:bg-gray-50 text-purple-600 font-medium">Like</button>
-                  <button className="flex-1 py-3 hover:bg-gray-50">Comment</button>
-                  <button className="flex-1 py-3 hover:bg-gray-50">Share</button>
-                </div>
-              </div>
             </div>
-
-            {/* Right Sidebar */}
-            <div className="lg:col-span-3 hidden lg:block">
-              <div className="bg-white rounded-2xl shadow p-6 sticky top-24">
-                <div className="flex justify-between mb-5">
-                  <h4 className="font-semibold">You Might Like</h4>
-                  <a href="#" className="text-purple-600 text-sm">See All</a>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img src="/assets/images/Avatar.png" alt="" className="w-10 h-10 rounded-full" />
-                      <div>
-                        <p className="font-medium text-sm">Radovan SkillArena</p>
-                        <p className="text-xs text-gray-500">Founder & CEO at Trophy</p>
-                      </div>
-                    </div>
-                    <button className="text-xs bg-purple-100 text-purple-700 px-4 py-1 rounded-full">Follow</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t lg:hidden z-50">
-          <div className="flex justify-around py-3 text-xs">
-            <a href="#" className="flex flex-col items-center text-purple-600">
-              <span className="text-2xl">🏠</span>
-              <span>Home</span>
-            </a>
-            <a href="#" className="flex flex-col items-center text-gray-500">
-              <span className="text-2xl">👥</span>
-              <span>Friends</span>
-            </a>
-            <a href="#" className="flex flex-col items-center text-gray-500 relative">
-              <span className="text-2xl">💬</span>
-              <span>Chat</span>
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">2</span>
-            </a>
-            <a href="#" className="flex flex-col items-center text-gray-500">
-              <span className="text-2xl">📅</span>
-              <span>Events</span>
-            </a>
-          </div>
+          </aside>
         </div>
       </div>
     </div>
