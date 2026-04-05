@@ -6,6 +6,7 @@ import {
 import profileImg from "../../public/profile.jpg";
 import timeAgo from "./TimeAgo";
 import { useGetLikeCountQuery, useGetLikesQuery, useToggleLikeMutation } from "../redux/features/like/likeApi";
+import { selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
 
 const groupRepliesByUser = (replies: any[] = []) => {
     const grouped: Record<string, any> = {};
@@ -28,7 +29,7 @@ const groupRepliesByUser = (replies: any[] = []) => {
 
 
 const CommentItem = ({ comment, depth = 0 }: any) => {
-
+    const currentUserId = useAppSelector(selectCurrentUser);
     const [toggleLike] = useToggleLikeMutation();
     const { data: likeData, refetch } = useGetLikeCountQuery({
         targetId: comment._id,
@@ -58,6 +59,10 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
             targetId: comment._id,
             targetType: "Comment",
         }
+    );
+
+    const isLikedByMe = likesUserData?.data?.some(
+        (like: any) => like.userId?._id === currentUserId
     );
 
 
@@ -126,9 +131,10 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
                         onClick={handleLike}
                         onMouseEnter={() => setShowLikesHover(true)}
                         onMouseLeave={() => setShowLikesHover(false)}
-                        className="hover:underline flex items-center gap-1 cursor-pointer"
+                        className={`hover:underline flex items-center gap-1 cursor-pointer transition ${isLikedByMe ? "text-blue-500 font-semibold" : "text-gray-600"
+                            }`}
                     >
-                        Like
+                        {isLikedByMe ? "Liked" : "Like"}
 
                         {likeCount > 0 && (
                             <span className="text-gray-400">
@@ -283,7 +289,7 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
                                 >
                                     <img
                                         src={
-                                           profileImg
+                                            profileImg
                                         }
                                         alt="user"
                                         className="h-8 w-8 rounded-full object-cover"
