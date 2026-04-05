@@ -58,7 +58,7 @@ const Feed = () => {
 
   return (
     <div className="min-h-screen bg-[#F5F7FA] font-['Poppins']">
-      <Navbar logo={logo} user={USER} />
+      <Navbar logo={logo} />
 
       <div className="pt-20 max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-12 gap-6">

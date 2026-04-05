@@ -6,7 +6,7 @@ type TUser = {
 };
 
 type TAuthState = {
-  user: TUser | null;
+  user: TUser | string| null;
   token: string | null;
 };
 
