@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bell, MessageCircle, LogOut, CloudCog } from "lucide-react";
+import { Bell, MessageCircle, LogOut } from "lucide-react";
 import { selectCurrentToken, selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
 import axios from "axios";
 import profile from '../../public/profile.jpg'
