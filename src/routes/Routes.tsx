@@ -10,7 +10,7 @@ const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "feed",
+        index: true,
         element: <Feed />
       },
       {

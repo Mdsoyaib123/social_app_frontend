@@ -70,11 +70,10 @@ const Register = () => {
   };
 
   return (
-    <section className="min-h-screen bg-[#F5F7FA] flex items-center justify-center px-4 relative overflow-hidden ">
+    <section className="min-h-screen bg-[#F5F7FA] flex items-center justify-center px-4 mt-16 relative overflow-hidden ">
       <div className="pointer-events-none absolute inset-0 z-0 select-none">
         <div className="absolute top-0 left-0">
-          <img src={shape1} className="w-32 md:w-40 opacity-80" />
-          <img
+          <img src={shape1} className="w-32 md:w-40 opacity-80" /> <img
             src={darkShape1}
             className="absolute top-0 left-0 w-32 md:w-40 opacity-30"
           />
