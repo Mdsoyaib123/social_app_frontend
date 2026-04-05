@@ -5,9 +5,7 @@ import {
 } from "../redux/features/comment/commentApi";
 import profileImg from "../../public/profile.jpg";
 import timeAgo from "./TimeAgo";
-import { useGetLikeCountQuery, useToggleLikeMutation } from "../redux/features/like/likeApi";
-
-
+import { useGetLikeCountQuery, useGetLikesQuery, useToggleLikeMutation } from "../redux/features/like/likeApi";
 
 const groupRepliesByUser = (replies: any[] = []) => {
     const grouped: Record<string, any> = {};
@@ -54,6 +52,13 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
         useCreateCommentMutation();
 
 
+    const [showLikesHover, setShowLikesHover] = useState(false);
+    const { data: likesUserData } = useGetLikesQuery(
+        {
+            targetId: comment._id,
+            targetType: "Comment",
+        }
+    );
 
 
     const handleReply = async () => {
@@ -119,7 +124,9 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
                     {/* LIKE BUTTON (UI unchanged, only count added) */}
                     <button
                         onClick={handleLike}
-                        className="hover:underline flex items-center gap-1"
+                        onMouseEnter={() => setShowLikesHover(true)}
+                        onMouseLeave={() => setShowLikesHover(false)}
+                        className="hover:underline flex items-center gap-1 cursor-pointer"
                     >
                         Like
 
@@ -259,6 +266,41 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {showLikesHover && likeCount > 0 && (
+                    <div className="absolute bottom-full mb-2 left-0 w-64 bg-white shadow-xl rounded-xl border p-3 z-50">
+                        <p className="text-xs text-gray-400 mb-2">
+                            Liked by
+                        </p>
+
+                        <div className="space-y-2">
+                            {likesUserData?.data?.slice(0, 5).map((like: any) => (
+                                <div
+                                    key={like._id}
+                                    className="flex items-center gap-2"
+                                >
+                                    <img
+                                        src={
+                                           profileImg
+                                        }
+                                        alt="user"
+                                        className="h-8 w-8 rounded-full object-cover"
+                                    />
+
+                                    <span className="text-sm text-gray-700 font-medium">
+                                        {like.userId?.firstName} {like.userId?.lastName}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {likeCount > 5 && (
+                            <p className="text-xs text-gray-400 mt-2">
+                                +{likeCount - 5} more
+                            </p>
+                        )}
                     </div>
                 )}
             </div>
