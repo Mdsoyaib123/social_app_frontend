@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 import { logout, setToken } from "../features/auth/authSlice";
 
-const baseURL = "http://localhost:5001/api/v1";
+const baseURL = "https://social-app-backend-vzq7.onrender.com/api/v1";
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: baseURL,
