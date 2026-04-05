@@ -49,6 +49,9 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
         skip: !showReplies,
     });
 
+    const { data: replyData2 } = useGetRepliesQuery(comment._id);
+    const replyCount = replyData2?.data?.length || 0;
+
     const [createComment, { isLoading: isReplying }] =
         useCreateCommentMutation();
 
@@ -145,9 +148,15 @@ const CommentItem = ({ comment, depth = 0 }: any) => {
 
                     <button
                         onClick={() => setShowReplies((prev) => !prev)}
-                        className="hover:underline"
+                        className="hover:underline flex items-center gap-1"
                     >
                         Reply
+
+                        {replyCount > 0 && (
+                            <span className="text-gray-400">
+                                ({replyCount})
+                            </span>
+                        )}
                     </button>
 
                     <span>•</span>

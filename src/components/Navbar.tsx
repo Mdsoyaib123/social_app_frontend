@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bell, MessageCircle, LogOut } from "lucide-react";
+import { Bell, MessageCircle, LogOut, CloudCog } from "lucide-react";
 import { selectCurrentToken, selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
 import axios from "axios";
 import profile from '../../public/profile.jpg'
@@ -14,13 +14,14 @@ const Navbar = ({ logo }: { logo: string }) => {
   const [user, setUser] = useState<any>(null);
   const dispatch = useDispatch()
 
+  console.log("Current User ID:", currentUserId);
+  console.log("Current Token:", currentToken);
   useEffect(() => {
     const fetchUser = async () => {
-      if (!currentUserId || !currentToken) return;
-
+      // if (!currentUserId || !currentToken) return;
       try {
         const res = await axios.get(
-          `http://localhost:5001/api/v1/users/getSingleUser?id=${currentUserId}`,
+          `http://localhost:5001/api/v1/users/getSingleUser`,
           {
             headers: {
               Authorization: `Bearer ${currentToken}`,
@@ -28,6 +29,7 @@ const Navbar = ({ logo }: { logo: string }) => {
           }
         );
 
+        console.log("User Data Response:", res.data);
         setUser(res.data.data);
       } catch (err) {
         console.error(err);
@@ -35,7 +37,9 @@ const Navbar = ({ logo }: { logo: string }) => {
     };
 
     fetchUser();
-  }, [currentUserId, currentToken]);
+  }, [ currentToken]);
+
+  console.log("Current User:", user); 
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b bg-white shadow-sm">
