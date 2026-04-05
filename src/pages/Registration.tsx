@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 
 import shape1 from "../assets/images/shape1.svg";
 import shape2 from "../assets/images/shape2.svg";
@@ -10,6 +9,9 @@ import darkShape3 from "../assets/images/dark_shape2.svg";
 import registrationImg from "../assets/images/registration.png";
 import logo from "../assets/images/logo.svg";
 import googleIcon from "../assets/images/google.svg";
+import { useRegisterMutation } from "../redux/features/auth/authApi";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 type RegisterForm = {
   firstName: string;
@@ -29,6 +31,8 @@ const Register = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,22 +51,21 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/register`,
-        {
-          firstName: form.firstName,
-          lastName: form.lastName,
-          email: form.email,
-          password: form.password,
-        },
-        { withCredentials: true }
-      );
+      const res = await register({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+      }).unwrap();
 
-      window.location.replace("/feed");
+      if (res.success) {
+        toast.success("Registration successful! Please login.");
+        navigate("/login");
+      }
+
     } catch (err: any) {
       const message =
-        err?.response?.data?.message ||
-        "Registration failed. Please try again.";
+        err?.data?.message || "Registration failed. Please try again.";
       alert(message);
     } finally {
       setLoading(false);

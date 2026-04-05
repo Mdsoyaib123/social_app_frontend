@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 
 import shape1 from "../assets/images/shape1.svg";
 import shape2 from "../assets/images/shape2.svg";
@@ -10,6 +9,13 @@ import darkShape3 from "../assets/images/dark_shape2.svg";
 import loginImg from "../assets/images/login.png";
 import logo from "../assets/images/logo.svg";
 import googleIcon from "../assets/images/google.svg";
+import { useLoginMutation } from "../redux/features/auth/authApi";
+import { useNavigate } from "react-router-dom";
+
+import { selectCurrentUser, useAppDispatch, useAppSelector } from "../redux/hooks/redux-hook";
+import { setCredentials } from "../redux/features/auth/authSlice";
+import toast from "react-hot-toast";
+
 
 type LoginForm = {
   email: string;
@@ -21,9 +27,13 @@ const Login = () => {
     email: "",
     password: "",
   });
-
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [login] = useLoginMutation();
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const currentUser = useAppSelector(selectCurrentUser);
+  console.log("Current user in Login component:", currentUser);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,17 +46,23 @@ const Login = () => {
 
     setLoading(true);
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        {
-          email: form.email,
-          password: form.password,
-          rememberMe,
-        },
-        { withCredentials: true }
-      );
+      const res = await login({
+        email: form.email,
+        password: form.password,
+      }).unwrap();
 
-      window.location.replace("/feed");
+      if (res.success) {
+        console.log("Login successful:", res);
+        dispatch(
+          setCredentials({
+            user: res.data?.userId,
+            token: res.data?.accessToken,
+          })
+        );
+
+        navigate("/", { replace: true });
+        toast.success("Logged out successfully");
+      }
     } catch (err: any) {
       const message =
         err?.response?.data?.message || "Unable to login. Please try again.";
@@ -55,6 +71,8 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+
 
   return (
     <section className="min-h-screen bg-[#F0F2F5] relative overflow-hidden flex items-center justify-center px-4 mt-10">

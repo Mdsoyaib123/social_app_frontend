@@ -3,6 +3,7 @@ import App from "../App";
 import Feed from "../pages/Feed";
 import Login from "../pages/Login";
 import Register from "../pages/Registration";
+import PrivateRoute from "./PrivateRoute";
 
 const routes = createBrowserRouter([
   {
@@ -11,7 +12,7 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Feed />
+        element: <PrivateRoute><Feed /></PrivateRoute>
       },
       {
         path: "login",
