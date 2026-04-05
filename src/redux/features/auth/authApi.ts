@@ -1,5 +1,5 @@
 import { baseApi } from "../../hooks/baseApi";
-import { setCredentials, logout } from "./authSlice";
+import {  logout } from "./authSlice";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
