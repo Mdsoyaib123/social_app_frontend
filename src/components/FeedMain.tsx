@@ -9,7 +9,7 @@ import {
 } from "../redux/features/post/postApi";
 import toast from "react-hot-toast";
 import { EllipsisVertical, UserLock } from "lucide-react";
-import { selectCurrentToken, selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
+import {  selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
 
 /* ---------------- TYPES ---------------- */
 
