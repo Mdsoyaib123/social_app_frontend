@@ -98,7 +98,7 @@ const PostCard = ({ post }: { post: Post }) => {
 
     //like state 
     const [likeCount, setLikeCount] = useState(0);
-    const [isLiked, setIsLiked] = useState(false);
+  
     const [showLikes, setShowLikes] = useState(false);
     const currentUserLiked = likesUserData?.data || []
     const isLikedByMe = currentUserLiked?.some(
@@ -113,10 +113,10 @@ const PostCard = ({ post }: { post: Post }) => {
             }).unwrap();
 
             if (res.liked) {
-                setIsLiked(true);
+               
                 setLikeCount((prev) => prev + 1);
             } else {
-                setIsLiked(false);
+               
                 setLikeCount((prev) => Math.max(0, prev - 1));
             }
         } catch (err) {
