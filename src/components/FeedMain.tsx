@@ -1,5 +1,5 @@
-import { useState } from "react";
-import profileImg from "../assets/images/profile.png";
+import { useEffect, useState } from "react";
+import profileImg from "../../public/profile.jpg";
 import {
     useCreatePostMutation,
     useGetFeedQuery,
@@ -9,7 +9,11 @@ import {
 } from "../redux/features/post/postApi";
 import toast from "react-hot-toast";
 import { EllipsisVertical, UserLock } from "lucide-react";
-import {  selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
+import { selectCurrentUser, useAppSelector } from "../redux/hooks/redux-hook";
+import { useGetLikeCountQuery, useGetLikesQuery, useToggleLikeMutation } from "../redux/features/like/likeApi";
+import { useCreateCommentMutation, useGetCommentsQuery } from "../redux/features/comment/commentApi";
+import CommentItem from "./CommentItem";
+import { CommentSkeleton } from "./CommentSkeleton";
 
 /* ---------------- TYPES ---------------- */
 
@@ -80,6 +84,78 @@ const PostCard = ({ post }: { post: Post }) => {
     const [preview, setPreview] = useState<string | null>(post.image || null);
 
 
+    //like api's 
+    const [toggleLike] = useToggleLikeMutation();
+    const { data: likeData } = useGetLikeCountQuery({
+        targetId: post._id,
+        targetType: "Post",
+    });
+    const { data: likesUserData } = useGetLikesQuery({
+        targetId: post._id,
+        targetType: "Post",
+    });
+    // console.log("likesUserData", likesUserData);
+
+    //like state 
+    const [likeCount, setLikeCount] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
+    const [showLikes, setShowLikes] = useState(false);
+    const currentUserLiked = likesUserData?.data || []
+    const isLikedByMe = currentUserLiked?.some(
+        (like: any) => like.userId?._id === currentUserId
+    );
+
+    const handleLike = async () => {
+        try {
+            const res = await toggleLike({
+                targetId: post._id,
+                targetType: "Post",
+            }).unwrap();
+
+            if (res.liked) {
+                setIsLiked(true);
+                setLikeCount((prev) => prev + 1);
+            } else {
+                setIsLiked(false);
+                setLikeCount((prev) => Math.max(0, prev - 1));
+            }
+        } catch (err) {
+            console.log("Like error:", err);
+        }
+    };
+
+    useEffect(() => {
+        if (likeData?.data?.count !== undefined) {
+            setLikeCount(likeData.data.count);
+        }
+    }, [likeData]);
+
+
+    //comment 
+    const [showComments, setShowComments] = useState(false);
+    const [commentText, setCommentText] = useState("");
+    const [createComment] = useCreateCommentMutation();
+    const { data: commentsData, isLoading: isCommentsLoading } = useGetCommentsQuery(post._id, {
+        skip: !showComments,
+    });
+
+    const handleAddComment = async () => {
+        if (!commentText.trim()) return;
+
+        try {
+            await createComment({
+                postId: post._id,
+                text: commentText,
+            }).unwrap();
+
+            setCommentText("");
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+    //posts 
     const closeModal = () => {
         setIsEditOpen(false);
         setEditText(post.text || "");
@@ -191,6 +267,49 @@ const PostCard = ({ post }: { post: Post }) => {
                     />
                 </div>
             )}
+            {/* ACTION STATS */}
+            <div className="px-5 pt-2 text-sm text-gray-500">
+                <div className="flex justify-between">
+                    <button onClick={() => setShowLikes(true)} className="cursor-pointer hover:underline">{likeCount} {likeCount === 1 ? "Like" : "Likes"}</button>
+                    {/* <span>{totalComments} {totalComments === 1 ? "Comment" : "Comments"}</span> */}
+                </div>
+            </div>
+
+
+
+            {/* ACTION BUTTONS */}
+            <div className="flex border-t text-sm mt-2">
+                <button
+                    onClick={handleLike}
+                    className={`flex-1 cursor-pointer py-3 flex items-center justify-center gap-2 transition rounded-b-xl
+    ${isLikedByMe
+                            ? "bg-blue-100 text-blue-600 font-semibold"
+                            : "hover:bg-gray-50 text-gray-600"}`}
+                >
+                    <span className="text-lg">
+                        {isLikedByMe ? "👍" : "👍🏻"}
+                    </span>
+
+                    Like
+
+                    {likeCount > 0 && (
+                        <span className="text-xs text-gray-500">({likeCount})</span>
+                    )}
+                </button>
+
+                <button
+                    onClick={() => setShowComments((prev) => !prev)}
+                    className="flex-1 py-3 hover:bg-gray-50"
+                >
+                    💬 Comment
+                </button>
+
+                <button className="flex-1 py-3 hover:bg-gray-50">
+                    🔗 Share
+                </button>
+            </div>
+
+
             {open && (
                 <>
                     {/* overlay (click outside to close) */}
@@ -210,7 +329,11 @@ const PostCard = ({ post }: { post: Post }) => {
                             className="flex w-full items-center gap-3 px-4 py-3 hover:bg-gray-100 cursor-pointer"
                         >
                             <UserLock size={15} />
-                            <span className="text-sm">Hide</span>
+                            {post.isPrivate ? (
+                                <span className="text-sm"> Public</span>
+                            ) : (
+                                <span className="text-sm"> Private</span>
+                            )}
                         </button>
 
                         <button
@@ -326,21 +449,109 @@ const PostCard = ({ post }: { post: Post }) => {
                     </div>
                 </div>
             )}
+            {showLikes && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div className="w-[380px] max-h-[500px] bg-white rounded-2xl shadow-xl overflow-hidden">
 
-            {/* ACTIONS */}
-            <div className="flex border-t text-sm">
-                <button className="flex-1 py-3 text-[#1b8fff] hover:bg-gray-50">
-                    Like
-                </button>
+                        {/* HEADER */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b">
+                            <h2 className="text-base font-semibold text-gray-800">
+                                Likes ({currentUserLiked.length})
+                            </h2>
 
-                <button className="flex-1 py-3 hover:bg-gray-50">
-                    Comment
-                </button>
+                            <button
+                                onClick={() => setShowLikes(false)}
+                                className="text-gray-500 hover:text-gray-700 text-lg"
+                            >
+                                ✕
+                            </button>
+                        </div>
 
-                <button className="flex-1 py-3 hover:bg-gray-50">
-                    Share
-                </button>
-            </div>
+                        {/* LIST */}
+                        <div className="max-h-[350px] overflow-y-auto px-2 py-2 space-y-1">
+                            {currentUserLiked.length > 0 ? (
+                                currentUserLiked.map((like: any) => (
+                                    <div
+                                        key={like._id}
+                                        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition"
+                                    >
+                                        <img
+                                            src={profileImg}
+                                            alt="user"
+                                            className="w-9 h-9 rounded-full object-cover"
+                                        />
+
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-medium text-gray-800">
+                                                {like.userId?.firstName} {like.userId?.lastName}
+                                            </span>
+
+                                            <span className="text-xs text-gray-500">
+                                                Liked this post
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-10 text-sm text-gray-500">
+                                    No likes yet
+                                </div>
+                            )}
+                        </div>
+
+                        {/* FOOTER */}
+                        <div className="border-t p-3">
+                            <button
+                                onClick={() => setShowLikes(false)}
+                                className="w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-medium transition"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showComments && (
+                <div className="px-5 py-4 border-t space-y-4">
+
+                    {/* ADD COMMENT */}
+                    <div className="flex gap-2">
+                        <img src={profileImg} className="w-8 h-8 rounded-full" />
+
+                        <div className="flex-1 flex gap-2">
+                            <input
+                                value={commentText}
+                                onChange={(e) => setCommentText(e.target.value)}
+                                placeholder="Write a comment..."
+                                className="flex-1 px-3 py-2 rounded-full bg-gray-100 text-sm outline-none"
+                            />
+
+                            <button
+                                onClick={handleAddComment}
+                                className="text-blue-500 text-sm"
+                            >
+                                Post
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* COMMENTS LIST */}
+                    <div className="space-y-2">
+                        {/* LOADING STATE */}
+                        {isCommentsLoading &&
+                            Array.from({ length: 3 }).map((_, i) => (
+                                <CommentSkeleton key={i} />
+                            ))}
+
+                        {/* DATA */}
+                        {!isCommentsLoading &&
+                            commentsData?.data?.map((comment: any) => (
+                                <CommentItem key={comment._id} comment={comment} />
+                            ))}
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
@@ -391,8 +602,6 @@ const FeedMain = ({ stories }: Props) => {
             toast.error(err?.data?.message || "Failed to create post");
         }
     };
-
-
 
 
 
