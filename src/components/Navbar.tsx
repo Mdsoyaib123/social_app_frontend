@@ -21,7 +21,7 @@ const Navbar = ({ logo }: { logo: string }) => {
       // if (!currentUserId || !currentToken) return;
       try {
         const res = await axios.get(
-          `http://localhost:5001/api/v1/users/getSingleUser`,
+          `https://social-app-backend-vzq7.onrender.com/api/v1/users/getSingleUser`,
           {
             headers: {
               Authorization: `Bearer ${currentToken}`,
