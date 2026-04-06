@@ -18,7 +18,7 @@ const Navbar = ({ logo }: { logo: string }) => {
   console.log("Current Token:", currentToken);
   useEffect(() => {
     const fetchUser = async () => {
-      // if (!currentUserId || !currentToken) return;
+      if (!currentUserId || !currentToken) return;
       try {
         const res = await axios.get(
           `https://social-app-backend-vzq7.onrender.com/api/v1/users/getSingleUser`,
