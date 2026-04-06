@@ -20,7 +20,7 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
-// 🔥 auto refresh token logic
+// auto refresh token logic
 const baseQueryWithReauth: typeof rawBaseQuery = async (
   args,
   api,
