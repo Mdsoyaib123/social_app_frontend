@@ -2,7 +2,6 @@ import { baseApi } from "../../hooks/baseApi";
 
 export const postApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        /* ---------------- CREATE POST ---------------- */
         createPost: builder.mutation<any, FormData>({
             query: (formData) => ({
                 url: "/post/create",
@@ -12,7 +11,6 @@ export const postApi = baseApi.injectEndpoints({
             invalidatesTags: ["Post"],
         }),
 
-        /* ---------------- GET FEED ---------------- */
         getFeed: builder.query<any, { page?: number; limit?: number }>({
             query: ({ page = 1, limit = 10 }) => ({
                 url: `/post/feeds?page=${page}&limit=${limit}`,
@@ -21,9 +19,6 @@ export const postApi = baseApi.injectEndpoints({
             providesTags: ["Post"],
         }),
 
-        /* =================================================
-           ✅ UPDATE POST (text + image)
-        ================================================= */
         updatePost: builder.mutation<
             any,
             { postId: string; data: FormData }
@@ -36,9 +31,6 @@ export const postApi = baseApi.injectEndpoints({
             invalidatesTags: ["Post"],
         }),
 
-        /* =================================================
-           ✅ UPDATE VISIBILITY (public/private)
-        ================================================= */
         updatePostVisibility: builder.mutation<
             any,
             { postId: string; isPrivate: boolean }
@@ -51,9 +43,6 @@ export const postApi = baseApi.injectEndpoints({
             invalidatesTags: ["Post"],
         }),
 
-        /* =================================================
-           ✅ DELETE POST
-        ================================================= */
         deletePost: builder.mutation<any, { postId: string }>({
             query: ({ postId }) => ({
                 url: `/post/deletePost/${postId}`,

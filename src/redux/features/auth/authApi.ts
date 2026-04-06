@@ -1,11 +1,8 @@
 import { baseApi } from "../../hooks/baseApi";
-import {  logout } from "./authSlice";
+import { logout } from "./authSlice";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // ======================
-    // LOGIN
-    // ======================
     login: builder.mutation<
       any,
       { email: string; password: string }
@@ -17,9 +14,6 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ======================
-    // REGISTER
-    // ======================
     register: builder.mutation<
       any,
       {
@@ -30,15 +24,12 @@ export const authApi = baseApi.injectEndpoints({
       }
     >({
       query: (userData) => ({
-        url: "/users/register", // ✅ REST standard
+        url: "/users/register",
         method: "POST",
         body: userData,
       }),
     }),
 
-    // ======================
-    // REFRESH TOKEN
-    // ======================
     refreshToken: builder.mutation<any, void>({
       query: () => ({
         url: "/auth/refresh-token",
@@ -46,15 +37,11 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    // ======================
-    // LOGOUT
-    // ======================
     logout: builder.mutation<void, void>({
       query: () => ({
         url: "/auth/logout",
         method: "POST",
       }),
-
       async onQueryStarted(_, { dispatch }) {
         dispatch(logout());
       },
@@ -62,7 +49,6 @@ export const authApi = baseApi.injectEndpoints({
   }),
 });
 
-// ✅ EXPORT ALL HOOKS (IMPORTANT)
 export const {
   useLoginMutation,
   useRegisterMutation,

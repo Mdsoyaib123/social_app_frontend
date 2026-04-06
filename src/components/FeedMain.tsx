@@ -528,7 +528,7 @@ const PostCard = ({ post }: { post: Post }) => {
 
                             <button
                                 onClick={handleAddComment}
-                                className="text-blue-500 text-sm"
+                                className="text-blue-500 text-sm cursor-pointer"
                             >
                                 Post
                             </button>
